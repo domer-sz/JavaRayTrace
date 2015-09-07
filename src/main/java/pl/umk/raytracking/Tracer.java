@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import pl.umk.raytracking.geometry.GeometricObject;
 import pl.umk.raytracking.geometry.Sphere;
@@ -25,33 +27,42 @@ import pl.umk.raytracking.utility.Vector3D;
  *
  * @author Szymon
  */
-public class Tracer {
+public class Tracer implements Runnable{
+    private int x;
+    private int y;
 
+    public Tracer() {
+    }
+
+    
+    
+    public Tracer(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+    
     public void trace(int x, int y) throws IOException {
-        //double ambientLight = 0.2;
-       // double accurity = 0.000001;
-
-        //double min = Double.MAX_VALUE;
+        
         Color color = new Color(0.0F, 0.0F, 0.0F, 0);
         boolean hit = false;
-       // boolean hit2 = false;
+    
         Color tempColor2 = Driver.world.background;
         for (int row = 0; row < Driver.sampler.samples; row++) {
             for (int col = 0; col < Driver.sampler.samples; col++) {
                 Point2D point = Driver.sampler.sample(row, col, x, y);
                 Ray camRay = Driver.projection.createRay(point);
-              //  Ray lightRay = Driver.lightProjection.createRay(point);
+             
 
                 double min = Double.MAX_VALUE;
-                //double min2 = Double.MAX_VALUE;
+               
                 Color tempColor = Driver.world.background;
 
                 
                 List<Double> intersections = new ArrayList<>();
                 for(int i = 0 ; i < Driver.world.objects.size(); i++){
-                    intersections.add(Driver.world.objects.get(i).hit(camRay));
-                    //System.out.println(Driver.world.objects.get(i).getColor().getSpecial());;
+                    intersections.add(Driver.world.objects.get(i).hit(camRay));                    
                 }
+                
                 int winningObjIndex = getWinningObj(intersections);
                 if (winningObjIndex == -1) {
                     tempColor = Driver.world.background;
@@ -63,24 +74,7 @@ public class Tracer {
                          hit=true;
                      }
                 }
-                
-                
-//for (GeometricObject object : Driver.world.objects) {
-//                for(int winningIndex = 0 ; winningIndex < Driver.world.objects.size(); winningIndex++){
-//                    double temp = Driver.world.objects.get(winningIndex).hit(camRay);
-//                    if (temp != 0.0 && temp < min) {
-//                        min = temp;
-//                        hit = true;
-//                        Vector3D intersection_position = camRay.origin.vectAdd(camRay.direction.vectMult(temp));
-//                        Vector3D intersecting_ray_direction = camRay.direction;
-//                        
-//                        List<Double> intersections = new ArrayList<>();
-//                        tempColor = getColorAt(intersection_position, intersecting_ray_direction, Driver.world.objects, winningIndex, Driver.world.lightSources);
-//                        //tempColor = object.color;
-//                     
-//                    }
-//
-//                }
+
                 color.add(tempColor);
             }
         }
@@ -254,6 +248,17 @@ public class Tracer {
         }
 
         return final_color.clip();
+    }
+
+    
+    public void run() {
+        try {
+            //System.out.println(x);
+            trace(x, y);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Tracer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

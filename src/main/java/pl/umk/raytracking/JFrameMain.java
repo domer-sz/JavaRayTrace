@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -22,14 +24,16 @@ public class JFrameMain extends javax.swing.JFrame {
     /**
      * Creates new form JFrameMain
      */
-    public  Driver driver;
-    
+    public Driver driver;
+
     public JFrameMain() {
         initComponents();
-        
+
         try {
-           driver = new Driver();
-            LabelBuffer.setIcon(new ImageIcon(Driver.myImage.buffer) );
+            driver = new Driver();
+            buffer1 = driver.myImage.buffer;
+            buffer2 = driver.myImage.buffer;
+            LabelBuffer.setIcon(new ImageIcon(Driver.myImage.buffer));
         } catch (IOException ex) {
             Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -133,7 +137,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
         jLabel8.setText("intenywność światła(-1.5;1.5):");
 
-        ambientlightForm.setText("0.2");
+        ambientlightForm.setText("-0.2");
 
         antyAliasingNumber.setModel(new javax.swing.AbstractListModel() {
             Integer[] ints = { 1, 2, 3, 4, 5,6,7,8,9,10 };
@@ -382,79 +386,102 @@ public class JFrameMain extends javax.swing.JFrame {
     }//GEN-LAST:event_camPosYFormActionPerformed
 
     private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
-      
+//
+//        int a;
+//        BufferedImage im = null;
+//        if (antyAliasingNumber.getSelectedValue() != null) {
+//            a = (int) antyAliasingNumber.getSelectedValue();
+//        } else {
+//            a = 1;
+//        }
+//
+//        camx = Double.parseDouble(camPosXForm.getText());
+//        camy = Double.parseDouble(camPosYForm.getText());
+//        camz = Double.parseDouble(camPosZForm.getText());
+//        lookx = Double.parseDouble(lookAtX.getText());
+//        lookz = Double.parseDouble(lookAtZ.getText());
+//        double looky = Double.parseDouble(lookAtY.getText());
+//        double ambilent = Double.parseDouble(ambientlightForm.getText());
+//        try {
+//            im = Driver.render(800, 600, ambilent, camx, camx, camx, lookx, looky, lookz, a, "");
+//            LabelBuffer.setIcon(new ImageIcon(im));
+//
+//        } catch (IOException ex) {
+//            Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         int a;
-        if(antyAliasingNumber.getSelectedValue() != null){
+        if (antyAliasingNumber.getSelectedValue() != null) {
             a = (int) antyAliasingNumber.getSelectedValue();
-        }else{
-            a=1;
+        } else {
+            a = 1;
         }
-            BufferedImage im;
+        BufferedImage im;
         try {
-            camx = Double.parseDouble( camPosXForm.getText());
+
+            camx = Double.parseDouble(camPosXForm.getText());
             camy = Double.parseDouble(camPosYForm.getText());
-            camz =  Double.parseDouble(camPosZForm.getText());
+            camz = Double.parseDouble(camPosZForm.getText());
             lookx = Double.parseDouble(lookAtX.getText());
             lookz = Double.parseDouble(lookAtZ.getText());
-            
-            im = driver.render(640, 480, Double.parseDouble(ambientlightForm.getText()),  
-                    camx, camy, camz, lookx ,
-                    Double.parseDouble(lookAtY.getText()), lookz, a, "");
-            
-             LabelBuffer.setIcon(new ImageIcon(im) );
+            double looky = Double.parseDouble(lookAtY.getText());
+            double ambilent = Double.parseDouble(ambientlightForm.getText());
+
+            im = Driver.render(800, 600, ambilent,
+                    camx, camy, camz, lookx,
+                    looky, lookz, a, "");
+
+            LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
             Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
-            //LabelBuffer.setIcon(new ImageIcon(Driver.myImage.buffer) );
-           
-        
+
+
     }//GEN-LAST:event_sampleButtonActionPerformed
 
     private void rightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rightActionPerformed
-         int a;
-        if(antyAliasingNumber.getSelectedValue() != null){
+        int a;
+        if (antyAliasingNumber.getSelectedValue() != null) {
             a = (int) antyAliasingNumber.getSelectedValue();
-        }else{
-            a=1;
+        } else {
+            a = 1;
         }
-            BufferedImage im;
+        BufferedImage im;
         try {
-           
+
             camx += 50;
             lookx += 50;
             camPosXForm.setText(String.valueOf(camx));
             lookAtX.setText(String.valueOf(lookx));
-            
-            im = driver.render(640, 480, Double.parseDouble(ambientlightForm.getText()),  
-                    camx, camy, camz, lookx ,
+
+            im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
+                    camx, camy, camz, lookx,
                     Double.parseDouble(lookAtY.getText()), lookz, a, "");
-            
-             LabelBuffer.setIcon(new ImageIcon(im) );
+
+            LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
             Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_rightActionPerformed
 
     private void leftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leftActionPerformed
-         int a;
-        if(antyAliasingNumber.getSelectedValue() != null){
+        int a;
+        if (antyAliasingNumber.getSelectedValue() != null) {
             a = (int) antyAliasingNumber.getSelectedValue();
-        }else{
-            a=1;
+        } else {
+            a = 1;
         }
-            BufferedImage im;
+        BufferedImage im;
         try {
-           
+
             camx -= 50;
-            lookx -=50;
+            lookx -= 50;
             camPosXForm.setText(String.valueOf(camx));
             lookAtX.setText(String.valueOf(lookx));
-            im = driver.render(640, 480, Double.parseDouble(ambientlightForm.getText()),  
-                    camx, camy, camz, lookx ,
+            im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
+                    camx, camy, camz, lookx,
                     Double.parseDouble(lookAtY.getText()), lookz, a, "");
-            
-             LabelBuffer.setIcon(new ImageIcon(im) );
+
+            LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
             Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -462,24 +489,24 @@ public class JFrameMain extends javax.swing.JFrame {
 
     private void upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upActionPerformed
         int a;
-        if(antyAliasingNumber.getSelectedValue() != null){
+        if (antyAliasingNumber.getSelectedValue() != null) {
             a = (int) antyAliasingNumber.getSelectedValue();
-        }else{
-            a=1;
+        } else {
+            a = 1;
         }
-            BufferedImage im;
+        BufferedImage im;
         try {
-           
+
             camz -= 50;
-            lookz -=50;
+            lookz -= 50;
             camPosZForm.setText(String.valueOf(camz));
             lookAtZ.setText(String.valueOf(lookz));
-            
-            im = driver.render(640, 480, Double.parseDouble(ambientlightForm.getText()),  
-                    camx, camy, camz, lookx ,
+
+            im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
+                    camx, camy, camz, lookx,
                     Double.parseDouble(lookAtY.getText()), lookz, a, "");
-            
-             LabelBuffer.setIcon(new ImageIcon(im) );
+
+            LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
             Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -487,117 +514,112 @@ public class JFrameMain extends javax.swing.JFrame {
 
     private void downActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downActionPerformed
         int a;
-        if(antyAliasingNumber.getSelectedValue() != null){
+        if (antyAliasingNumber.getSelectedValue() != null) {
             a = (int) antyAliasingNumber.getSelectedValue();
-        }else{
-            a=1;
+        } else {
+            a = 1;
         }
-            BufferedImage im;
+        BufferedImage im;
         try {
-           
+
             camz += 50;
             lookz += 50;
             camPosZForm.setText(String.valueOf(camz));
             lookAtZ.setText(String.valueOf(lookz));
-            
-            
-            im = driver.render(640, 480, Double.parseDouble(ambientlightForm.getText()),  
-                    camx, camy, camz, lookx ,
+
+            im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
+                    camx, camy, camz, lookx,
                     Double.parseDouble(lookAtY.getText()), lookz, a, "");
-            
-             LabelBuffer.setIcon(new ImageIcon(im) );
+
+            LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
             Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_downActionPerformed
 
     private void lookLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lookLeftActionPerformed
-       int a;
-        if(antyAliasingNumber.getSelectedValue() != null){
+        int a;
+        if (antyAliasingNumber.getSelectedValue() != null) {
             a = (int) antyAliasingNumber.getSelectedValue();
-        }else{
-            a=1;
+        } else {
+            a = 1;
         }
-            BufferedImage im;
+        BufferedImage im;
         try {
-           
+
             lookx -= 50;
             lookz -= 50;
-             lookAtX.setText(String.valueOf(lookx));
+            lookAtX.setText(String.valueOf(lookx));
             lookAtZ.setText(String.valueOf(lookz));
-            
-            im = driver.render(640, 480, Double.parseDouble(ambientlightForm.getText()),  
-                    camx, camy, camz, lookx ,
+
+            im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
+                    camx, camy, camz, lookx,
                     Double.parseDouble(lookAtY.getText()), lookz, a, "");
-            
-             LabelBuffer.setIcon(new ImageIcon(im) );
+
+            LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
             Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_lookLeftActionPerformed
 
     private void LookRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LookRightActionPerformed
-       int a;
-        if(antyAliasingNumber.getSelectedValue() != null){
+        int a;
+        if (antyAliasingNumber.getSelectedValue() != null) {
             a = (int) antyAliasingNumber.getSelectedValue();
-        }else{
-            a=1;
+        } else {
+            a = 1;
         }
-            BufferedImage im;
+        BufferedImage im;
         try {
-           
+
             lookx += 50;
             lookz += 50;
             lookAtX.setText(String.valueOf(lookx));
             lookAtZ.setText(String.valueOf(lookz));
-            
-            im = driver.render(640, 480, Double.parseDouble(ambientlightForm.getText()),  
-                    camx, camy, camz, lookx ,
+
+            im = driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
+                    camx, camy, camz, lookx,
                     Double.parseDouble(lookAtY.getText()), lookz, a, "");
-            
-             LabelBuffer.setIcon(new ImageIcon(im) );
+
+            LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
             Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_LookRightActionPerformed
 
     private void renderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renderButtonActionPerformed
-       
+
         int a;
-        if(antyAliasingNumber.getSelectedValue() != null){
+        if (antyAliasingNumber.getSelectedValue() != null) {
             a = (int) antyAliasingNumber.getSelectedValue();
-        }else{
-            a=1;
+        } else {
+            a = 1;
         }
-            BufferedImage im;
+        BufferedImage im;
         try {
-            /*camx = Double.parseDouble( camPosXForm.getText());
-            camy = Double.parseDouble(camPosYForm.getText());
-            camz =  Double.parseDouble(camPosZForm.getText());
-            lookx = Double.parseDouble(lookAtX.getText());
-            lookz = Double.parseDouble(lookAtZ.getText());*/
-            
-            im = driver.render(Integer.parseInt(renderWidth.getText()), Integer.parseInt(renderHeight.getText()), Double.parseDouble(ambientlightForm.getText()),  
-                    camx, camy, camz, lookx , Double.parseDouble(lookAtY.getText()), lookz, a, filePath.getText());
-            
+
+            im = Driver.render(Integer.parseInt(renderWidth.getText()), Integer.parseInt(renderHeight.getText()), Double.parseDouble(ambientlightForm.getText()),
+                    camx, camy, camz, lookx, Double.parseDouble(lookAtY.getText()), lookz, a, filePath.getText());
+
             // LabelBuffer.setIcon(new ImageIcon(im) );
         } catch (IOException ex) {
             Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
+
             //LabelBuffer.setIcon(new ImageIcon(Driver.myImage.buffer) );
-           
-        
+
     }//GEN-LAST:event_renderButtonActionPerformed
-    
+
     double camx = 0;
     double camy = 0;
     double camz = 800;
-    
+
     double lookx = 0;
     double lookz = 0;
-    
-    
+
+    BufferedImage buffer1;
+    BufferedImage buffer2;
+
     /**
      * @param args the command line arguments
      */
@@ -624,7 +646,7 @@ public class JFrameMain extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(JFrameMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        ExecutorService exec = Executors.newCachedThreadPool();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
