@@ -6,6 +6,7 @@
 package pl.umk.raytracking;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import pl.umk.raytracking.geometry.Sphere;
 import pl.umk.raytracking.light.Light;
 import pl.umk.raytracking.projection.Orthographic;
@@ -85,7 +87,7 @@ public class Driver {
     }
 
     public static BufferedImage render(int width, int height, double ambit, double camPosX, double camPosY, double camPosZ,
-            double camLookAtX, double camLookAtY, double camLookAtZ, int antyAliasing, String filepath) throws IOException {
+            double camLookAtX, double camLookAtY, double camLookAtZ, int antyAliasing, String filepath, int animateNr) throws IOException {
 
         long start = System.nanoTime();
 
@@ -120,15 +122,15 @@ public class Driver {
                 Logger.getLogger(Driver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        //System.out.println("skladanie renderu zakonczone " + p);
+        System.out.println("skladanie renderu zakonczone " + p);
  
 
-        if (!"".equals(filepath)) {
+        if (!"".equals(filepath) && animateNr == 0) {
             myImage.write("PNG");
         }
 
         long end = System.nanoTime();
-        System.out.println("time: " + (end - start) / 1000000000.0F);
+       // System.out.println("time: " + (end - start) / 1000000000.0F);
 
         return myImage.buffer;
     }

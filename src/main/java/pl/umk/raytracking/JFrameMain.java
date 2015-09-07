@@ -5,7 +5,9 @@
  */
 package pl.umk.raytracking;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 /**
@@ -84,6 +87,7 @@ public class JFrameMain extends javax.swing.JFrame {
         LookRight = new javax.swing.JButton();
         filePath = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
+        animate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -213,6 +217,13 @@ public class JFrameMain extends javax.swing.JFrame {
 
             jLabel10.setText("scieżka do pliku :");
 
+            animate.setText("animate");
+            animate.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    animateActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -240,6 +251,9 @@ public class JFrameMain extends javax.swing.JFrame {
                                     .addComponent(LookRight, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGap(45, 45, 45)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(animate)
+                            .addGap(0, 0, Short.MAX_VALUE))
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel12)
@@ -349,7 +363,7 @@ public class JFrameMain extends javax.swing.JFrame {
                                 .addComponent(lookAtZ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(47, 47, 47)
                             .addComponent(sampleButton)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                             .addComponent(jLabel5)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -367,7 +381,9 @@ public class JFrameMain extends javax.swing.JFrame {
                     .addComponent(jLabel10)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(filePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(32, 32, 32))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(animate)
+                    .addContainerGap())
             );
 
             pack();
@@ -386,29 +402,7 @@ public class JFrameMain extends javax.swing.JFrame {
     }//GEN-LAST:event_camPosYFormActionPerformed
 
     private void sampleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleButtonActionPerformed
-//
-//        int a;
-//        BufferedImage im = null;
-//        if (antyAliasingNumber.getSelectedValue() != null) {
-//            a = (int) antyAliasingNumber.getSelectedValue();
-//        } else {
-//            a = 1;
-//        }
-//
-//        camx = Double.parseDouble(camPosXForm.getText());
-//        camy = Double.parseDouble(camPosYForm.getText());
-//        camz = Double.parseDouble(camPosZForm.getText());
-//        lookx = Double.parseDouble(lookAtX.getText());
-//        lookz = Double.parseDouble(lookAtZ.getText());
-//        double looky = Double.parseDouble(lookAtY.getText());
-//        double ambilent = Double.parseDouble(ambientlightForm.getText());
-//        try {
-//            im = Driver.render(800, 600, ambilent, camx, camx, camx, lookx, looky, lookz, a, "");
-//            LabelBuffer.setIcon(new ImageIcon(im));
-//
-//        } catch (IOException ex) {
-//            Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+
         int a;
         if (antyAliasingNumber.getSelectedValue() != null) {
             a = (int) antyAliasingNumber.getSelectedValue();
@@ -428,7 +422,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
             im = Driver.render(800, 600, ambilent,
                     camx, camy, camz, lookx,
-                    looky, lookz, a, "");
+                    looky, lookz, a, "", 0);
 
             LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
@@ -455,7 +449,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
             im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
                     camx, camy, camz, lookx,
-                    Double.parseDouble(lookAtY.getText()), lookz, a, "");
+                    Double.parseDouble(lookAtY.getText()), lookz, a, "", 0);
 
             LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
@@ -479,7 +473,7 @@ public class JFrameMain extends javax.swing.JFrame {
             lookAtX.setText(String.valueOf(lookx));
             im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
                     camx, camy, camz, lookx,
-                    Double.parseDouble(lookAtY.getText()), lookz, a, "");
+                    Double.parseDouble(lookAtY.getText()), lookz, a, "", 0);
 
             LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
@@ -504,7 +498,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
             im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
                     camx, camy, camz, lookx,
-                    Double.parseDouble(lookAtY.getText()), lookz, a, "");
+                    Double.parseDouble(lookAtY.getText()), lookz, a, "", 0);
 
             LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
@@ -529,7 +523,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
             im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
                     camx, camy, camz, lookx,
-                    Double.parseDouble(lookAtY.getText()), lookz, a, "");
+                    Double.parseDouble(lookAtY.getText()), lookz, a, "", 0);
 
             LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
@@ -554,7 +548,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
             im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
                     camx, camy, camz, lookx,
-                    Double.parseDouble(lookAtY.getText()), lookz, a, "");
+                    Double.parseDouble(lookAtY.getText()), lookz, a, "", 0);
 
             LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
@@ -579,7 +573,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
             im = driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
                     camx, camy, camz, lookx,
-                    Double.parseDouble(lookAtY.getText()), lookz, a, "");
+                    Double.parseDouble(lookAtY.getText()), lookz, a, "", 0);
 
             LabelBuffer.setIcon(new ImageIcon(im));
         } catch (IOException ex) {
@@ -599,7 +593,7 @@ public class JFrameMain extends javax.swing.JFrame {
         try {
 
             im = Driver.render(Integer.parseInt(renderWidth.getText()), Integer.parseInt(renderHeight.getText()), Double.parseDouble(ambientlightForm.getText()),
-                    camx, camy, camz, lookx, Double.parseDouble(lookAtY.getText()), lookz, a, filePath.getText());
+                    camx, camy, camz, lookx, Double.parseDouble(lookAtY.getText()), lookz, a, filePath.getText(), 0);
 
             // LabelBuffer.setIcon(new ImageIcon(im) );
         } catch (IOException ex) {
@@ -609,6 +603,71 @@ public class JFrameMain extends javax.swing.JFrame {
             //LabelBuffer.setIcon(new ImageIcon(Driver.myImage.buffer) );
 
     }//GEN-LAST:event_renderButtonActionPerformed
+
+    private void animateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_animateActionPerformed
+//        for (int i = 0; i < 50; i++) {
+//            int a;
+//            if (antyAliasingNumber.getSelectedValue() != null) {
+//                a = (int) antyAliasingNumber.getSelectedValue();
+//            } else {
+//                a = 1;
+//            }
+//            BufferedImage im;
+//            try {
+//
+//                camx = Double.parseDouble(camPosXForm.getText());
+//                camy = Double.parseDouble(camPosYForm.getText());
+//                camz = Double.parseDouble(camPosZForm.getText());
+//                lookx = Double.parseDouble(lookAtX.getText());
+//                lookz = Double.parseDouble(lookAtZ.getText());
+//                double looky = Double.parseDouble(lookAtY.getText());
+//                double ambilent = Double.parseDouble(ambientlightForm.getText());
+//
+//                im = Driver.render(800, 600, ambilent,
+//                        camx - i * 10, camy + i * 10, camz - i * 10, lookx,
+//                        looky, lookz, a, "", 0);
+//                System.out.println("zrobione " + im.toString());
+//
+//                ImageIO.write(im, "PNG", new File("img" + i + ".png"));
+//                LabelBuffer.setIcon(new ImageIcon(im));
+//
+//            } catch (IOException ex) {
+//                Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+        
+        int a;
+        if (antyAliasingNumber.getSelectedValue() != null) {
+            a = (int) antyAliasingNumber.getSelectedValue();
+        } else {
+            a = 1;
+        }
+        BufferedImage im;
+        try {
+
+            camx = Double.parseDouble(camPosXForm.getText());
+            camy = Double.parseDouble(camPosYForm.getText());
+            camz = Double.parseDouble(camPosZForm.getText());
+            lookx = Double.parseDouble(lookAtX.getText());
+            lookz = Double.parseDouble(lookAtZ.getText());
+            double looky = Double.parseDouble(lookAtY.getText());
+            double ambilent = Double.parseDouble(ambientlightForm.getText());
+
+            im = Driver.render(800, 600, ambilent,
+                    camx, camy, -camz, lookx,
+                    looky, lookz, a, "", 0);
+
+            LabelBuffer.setIcon(new ImageIcon(im));
+            im = Driver.render(800, 600, ambilent,
+                    camx, camy, 100, lookx,
+                    looky, lookz, a, "", 0);
+
+            LabelBuffer.setIcon(new ImageIcon(im));
+        } catch (IOException ex) {
+            Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_animateActionPerformed
 
     double camx = 0;
     double camy = 0;
@@ -659,6 +718,7 @@ public class JFrameMain extends javax.swing.JFrame {
     private javax.swing.JLabel LabelBuffer;
     private javax.swing.JButton LookRight;
     private javax.swing.JTextField ambientlightForm;
+    private javax.swing.JButton animate;
     public javax.swing.JList antyAliasingNumber;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField camPosXForm;
