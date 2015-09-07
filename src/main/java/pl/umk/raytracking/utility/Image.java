@@ -19,7 +19,7 @@ import pl.umk.raytracking.Driver;
  * @author Szymon
  */
 public class Image {
-    public BufferedImage buffer;
+    public static BufferedImage buffer;
     public File image;
     private String filen;
     

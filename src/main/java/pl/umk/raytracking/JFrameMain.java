@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import pl.umk.raytracking.utility.Image;
 
 /**
  *
@@ -709,7 +710,9 @@ public class JFrameMain extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                 
                 new JFrameMain().setVisible(true);
+                
             }
         });
     }
