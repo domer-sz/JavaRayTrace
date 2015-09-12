@@ -122,7 +122,7 @@ public class Driver {
                 Logger.getLogger(Driver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        System.out.println("skladanie renderu zakonczone " + p);
+//        System.out.println("skladanie renderu zakonczone " + p);
  
 
         if (!"".equals(filepath) && animateNr == 0) {

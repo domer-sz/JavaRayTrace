@@ -18,6 +18,8 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import pl.umk.raytracking.utility.Image;
+import pl.umk.raytracking.utility.Point2D;
+import pl.umk.raytracking.utility.Vector3D;
 
 /**
  *
@@ -29,7 +31,7 @@ public class JFrameMain extends javax.swing.JFrame {
      * Creates new form JFrameMain
      */
     public Driver driver;
-
+    private Integer stepDist = 15;
     public JFrameMain() {
         initComponents();
 
@@ -443,8 +445,18 @@ public class JFrameMain extends javax.swing.JFrame {
         BufferedImage im;
         try {
 
-            camx += 50;
-            lookx += 50;
+            Vector3D vector = new Vector3D(lookx-camx, 0, lookz-camz);
+            vector = new Vector3D(-vector.z, 0, vector.x);
+            
+            vector.normalize();         
+            
+            camx += Math.round(vector.mult(stepDist).x);
+            camz += Math.round(vector.mult(stepDist).z);
+            
+            lookx += Math.round(vector.mult(stepDist).x);
+            lookz += Math.round(vector.mult(stepDist).z);
+            
+            
             camPosXForm.setText(String.valueOf(camx));
             lookAtX.setText(String.valueOf(lookx));
 
@@ -468,8 +480,21 @@ public class JFrameMain extends javax.swing.JFrame {
         BufferedImage im;
         try {
 
-            camx -= 50;
-            lookx -= 50;
+//            camx -= 50;
+//            lookx -= 50;
+            
+            Vector3D vector = new Vector3D(lookx-camx, 0, lookz-camz);
+            vector = new Vector3D(vector.z, 0, -vector.x);
+            
+            vector.normalize();         
+            
+            camx += Math.round(vector.mult(stepDist).x);
+            camz += Math.round(vector.mult(stepDist).z);
+            
+            lookx += Math.round(vector.mult(stepDist).x);
+            lookz += Math.round(vector.mult(stepDist).z);
+            
+            
             camPosXForm.setText(String.valueOf(camx));
             lookAtX.setText(String.valueOf(lookx));
             im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
@@ -491,9 +516,20 @@ public class JFrameMain extends javax.swing.JFrame {
         }
         BufferedImage im;
         try {
-
-            camz -= 50;
-            lookz -= 50;
+    
+            
+            Vector3D vector = new Vector3D(lookx-camx, 0, lookz-camz);
+            
+            vector.normalize();         
+            
+            camx += Math.round(vector.mult(stepDist*2).x);
+            camz += Math.round(vector.mult(stepDist*2).z);
+            
+            lookx += Math.round(vector.mult(stepDist*2).x);
+            lookz += Math.round(vector.mult(stepDist*2).z);
+            
+            
+            
             camPosZForm.setText(String.valueOf(camz));
             lookAtZ.setText(String.valueOf(lookz));
 
@@ -517,8 +553,17 @@ public class JFrameMain extends javax.swing.JFrame {
         BufferedImage im;
         try {
 
-            camz += 50;
-            lookz += 50;
+            Vector3D vector = new Vector3D(lookx-camx, 0, lookz-camz);
+            
+            vector.normalize();         
+            
+            camx -= Math.round(vector.mult(stepDist*2).x);
+            camz -= Math.round(vector.mult(stepDist*2).z);
+            
+            lookx -= Math.round(vector.mult(stepDist*2).x);
+            lookz -= Math.round(vector.mult(stepDist*2).z);
+            
+            
             camPosZForm.setText(String.valueOf(camz));
             lookAtZ.setText(String.valueOf(lookz));
 
@@ -542,8 +587,8 @@ public class JFrameMain extends javax.swing.JFrame {
         BufferedImage im;
         try {
 
-            lookx -= 50;
-            lookz -= 50;
+            lookx =  Math.round( (lookx-camx)*Math.cos(-0.1) - (lookz - camz)*Math.sin(-0.1)+camx );
+            lookz =  Math.round( (lookx-camx)*Math.sin(-0.1) + (lookz - camz)*Math.cos(-0.1)+camz );
             lookAtX.setText(String.valueOf(lookx));
             lookAtZ.setText(String.valueOf(lookz));
 
@@ -567,8 +612,8 @@ public class JFrameMain extends javax.swing.JFrame {
         BufferedImage im;
         try {
 
-            lookx += 50;
-            lookz += 50;
+            lookx = Math.round( (lookx-camx)*Math.cos(0.1) - (lookz - camz)*Math.sin(0.1)+camx );
+            lookz =  Math.round( (lookx-camx)*Math.sin(0.1) + (lookz - camz)*Math.cos(0.1)+camz );
             lookAtX.setText(String.valueOf(lookx));
             lookAtZ.setText(String.valueOf(lookz));
 
@@ -606,37 +651,7 @@ public class JFrameMain extends javax.swing.JFrame {
     }//GEN-LAST:event_renderButtonActionPerformed
 
     private void animateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_animateActionPerformed
-//        for (int i = 0; i < 50; i++) {
-//            int a;
-//            if (antyAliasingNumber.getSelectedValue() != null) {
-//                a = (int) antyAliasingNumber.getSelectedValue();
-//            } else {
-//                a = 1;
-//            }
-//            BufferedImage im;
-//            try {
-//
-//                camx = Double.parseDouble(camPosXForm.getText());
-//                camy = Double.parseDouble(camPosYForm.getText());
-//                camz = Double.parseDouble(camPosZForm.getText());
-//                lookx = Double.parseDouble(lookAtX.getText());
-//                lookz = Double.parseDouble(lookAtZ.getText());
-//                double looky = Double.parseDouble(lookAtY.getText());
-//                double ambilent = Double.parseDouble(ambientlightForm.getText());
-//
-//                im = Driver.render(800, 600, ambilent,
-//                        camx - i * 10, camy + i * 10, camz - i * 10, lookx,
-//                        looky, lookz, a, "", 0);
-//                System.out.println("zrobione " + im.toString());
-//
-//                ImageIO.write(im, "PNG", new File("img" + i + ".png"));
-//                LabelBuffer.setIcon(new ImageIcon(im));
-//
-//            } catch (IOException ex) {
-//                Logger.getLogger(JFrameMain.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-        
+
         int a;
         if (antyAliasingNumber.getSelectedValue() != null) {
             a = (int) antyAliasingNumber.getSelectedValue();

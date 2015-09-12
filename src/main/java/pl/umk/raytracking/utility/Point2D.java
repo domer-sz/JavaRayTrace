@@ -22,5 +22,9 @@ public class Point2D {
         this.y = y;
     }
     
+    public Point2D sub(double scalar){
+        return new Point2D(x*scalar, y*scalar);
+    }
+    
     
 }
