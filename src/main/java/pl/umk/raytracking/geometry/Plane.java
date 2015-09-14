@@ -35,18 +35,7 @@ public class Plane implements GeometricObject{
     
     @Override
     public double findIntersection(Ray ray) {
-        Vector3D ray_direction = ray.direction;
-		
-		double a = ray_direction.dotProduct(normal);
-		
-		if (a == 0) {
-			// ray is parallel to the plane
-			return -1;
-		}
-		else {return -1;
-			//double b = normal.dotProduct(ray.origin.vectAdd(normal.vectMult(distance).negative()));
-			//return -1*b/a;
-		}
+        return hit(ray);
     }
 
     public Vector3D getNormalAt(Vector3D point) {

@@ -26,6 +26,7 @@ public class ThreadRenderer implements Callable{
 
     
     public Integer call() throws Exception {
+        long start = System.nanoTime();
         int pom = 0;        
         for (int yy = y; yy < (y + 100) && yy< Driver.world.viewPlane.height; yy++) {
 
@@ -40,7 +41,8 @@ public class ThreadRenderer implements Callable{
            
         }
         
-
+        long end = System.nanoTime();
+        System.out.println("wykonanie wątku trwało: " + (end - start) / 1000000000.0F);
        return pom;
     }
 

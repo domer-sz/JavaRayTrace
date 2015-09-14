@@ -6,8 +6,10 @@
 package pl.umk.raytracking.scene;
 
 import java.util.ArrayList;
+import pl.umk.raytracking.geometry.Cube;
 import pl.umk.raytracking.geometry.GeometricObject;
 import pl.umk.raytracking.geometry.Plane;
+import pl.umk.raytracking.geometry.SmallPlane;
 import pl.umk.raytracking.geometry.Sphere;
 import pl.umk.raytracking.light.Light;
 import pl.umk.raytracking.light.Source;
@@ -43,23 +45,31 @@ public class World {
         
         Color whiteLight = new Color(1.0F, 1.0F, 1.0F, 0);
          
-         
-        objects.add(new Sphere(new Vector3D(-150, 0, 330), 20, shinyRed));        
-        objects.add(new Sphere(new Vector3D(+450, 50, 390), 50, shinyRed));
-        objects.add(new Sphere(new Vector3D(0, 0, -150), 30, shinyMagenta));
-        //objects.add(new Sphere(new Vector3D(-650, 0, 0), 150, shinyGreen));
+        //sfery
+        objects.add(new Sphere(new Vector3D(-50, 0, 0), 50, shinyRed));        
+        objects.add(new Sphere(new Vector3D(+450, 150, 390), 50, shinyRed));
+          objects.add(new Sphere(new Vector3D(0, 0, -150), 130, shinyMagenta));
+        objects.add(new Sphere(new Vector3D(-650, 0, 0), 150, shinyGreen));
         
-       // objects.add(new Sphere(new Vector3D(-650, 0, -400), 100, shinyYellow));        
-       // objects.add(new Sphere(new Vector3D(350, 0, 0), 150, shinyBlue));        
-        //objects.add(new Sphere(new Vector3D(0, 0, 200), 25, shinyWhite));
+        //objects.add(new Sphere(new Vector3D(-650, 0, -400), 100, shinyYellow));        
+        objects.add(new Sphere(new Vector3D(350, 0, 0), 150, shinyBlue));        
+        objects.add(new Sphere(new Vector3D(0, 0, 200), 25, shinyWhite));
         objects.add(new Sphere(new Vector3D(-300, 0, 400), 56, shinyYellow));
         
+        //kostka
+        //objects.addAll(new Cube(new Vector3D(-100, 100, 0), new Vector3D(100, 200, -200), shinyRed).addToScene());
+        
+        //lustro
+        objects.addAll(new SmallPlane(new Vector3D(-100, -50, -200), 200, 500, shinySilver).addToScene());
+        
+        //podloga
         objects.add(new Plane(new Vector3D(0.0, -100.0, 0.0), new Vector3D(0.0, 1.0, 0.0 ) , new Color(0.3F, 0.3F,  0.3F, 0.1F, 1)) );
-        objects.add(new Triangle(new Vector3D(100, 0, 00), new Vector3D(0, 90, 0), new Vector3D(0, 0, 90), shinyBlue));
+       
+        
         
         
         //nad swiatlem
-        objects.add(new Sphere(new Vector3D(-300.0, 550.0, 800.0), 20, whiteLight));
+        //objects.add(new Sphere(new Vector3D(-300.0, 550.0, 800.0), 20, whiteLight));
         
        
         Light light = new Light(new Vector3D(-300.0, 500.0, 800.0), whiteLight);

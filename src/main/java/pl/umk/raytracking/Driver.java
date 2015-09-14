@@ -45,8 +45,7 @@ public class Driver {
 
     public Driver() throws IOException {
         long start = System.nanoTime();
-        Random random = new Random();
-
+       
         world = new World(800, 600, 1);
         myImage = new Image("Image.png");
 
@@ -56,24 +55,15 @@ public class Driver {
         for (int y = 0; y < world.viewPlane.height; y += 1) {
             for (int x = 0; x < world.viewPlane.width; x += 1) {
 
-                // tracer = new Tracer(x,y);
-                // tracer.run();
                 tracer.trace(x, y);
             }
         }
 
-//        for (int y = world.viewPlane.height / 2; y < world.viewPlane.height; y += 1) {
-//            for (int x = 0; x < world.viewPlane.width; x += 1) {
-//
-//                //tracer = new Tracer(x,y);
-//                //tracer.run();
-//            }
-//        }
 
         myImage.write("PNG");
 
         long end = System.nanoTime();
-       // System.out.println("time: " + (end - start) / 1000000000.0F);
+        System.out.println("time: " + (end - start) / 1000000000.0F);
 
     }
 
@@ -121,7 +111,7 @@ public class Driver {
         }
 
         long end = System.nanoTime();
-       // System.out.println("time: " + (end - start) / 1000000000.0F);
+        System.out.println("time: " + (end - start) / 1000000000.0F);
 
         return myImage.buffer;
     }
