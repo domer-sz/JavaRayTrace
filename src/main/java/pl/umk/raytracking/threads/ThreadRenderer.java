@@ -15,24 +15,25 @@ import static pl.umk.raytracking.Driver.world;
  */
 public class ThreadRenderer implements Callable{
 
-    int width;
-    int y;
+    int xx;
 
-    public ThreadRenderer(int width, int y) {
-        this.width = width;
-        this.y = y;
+    public ThreadRenderer(int x) {
+       
+        this.xx = x;
 
     }
 
     
+    @Override
     public Integer call() throws Exception {
         long start = System.nanoTime();
-        int pom = 0;        
-        for (int yy = y; yy < (y + 100) && yy< Driver.world.viewPlane.height; yy++) {
-
-            for (int x = 0; x < world.viewPlane.width; x += 1) {
+        int pom = 0; 
+        
+        for (int x = xx; x < (xx + Driver.renderThreadNumber) && x< Driver.world.viewPlane.width; x++) {
+           
+            for (int y = 0; y < world.viewPlane.height; y += 1) {
                 try {                
-                    tracer.trace(x, yy);
+                    tracer.trace(x, y);
                 } catch (IOException ex) {
                     Logger.getLogger(ThreadRenderer.class.getName()).log(Level.SEVERE, null, ex);
                 }

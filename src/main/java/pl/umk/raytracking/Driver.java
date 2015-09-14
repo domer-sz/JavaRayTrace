@@ -38,7 +38,7 @@ public class Driver {
     public static Tracer tracer;
     public static Sampler sampler;
     public static Projection projection;
-    // public static Projection lightProjection;
+    public static int renderThreadNumber = 100;
 
     public static double ambientlight = 0.05;
     public static double accuracy = 0.000000001;
@@ -52,13 +52,27 @@ public class Driver {
         sampler = new RegularSample(3);
         projection = new Perspective(new Vector3D(0, 130, 800), new Vector3D(0.0, 0.0, 0.0), 35);
         tracer = new Tracer();
-        for (int y = 0; y < world.viewPlane.height; y += 1) {
-            for (int x = 0; x < world.viewPlane.width; x += 1) {
 
-                tracer.trace(x, y);
+       int height = Driver.world.viewPlane.height;
+       int width = Driver.world.viewPlane.width;
+       int p = 0;
+       ExecutorService pool = Executors.newFixedThreadPool(width/renderThreadNumber);
+        System.out.println("dlugosc: " + width/renderThreadNumber);
+       Set<Future<Integer>> set  = new HashSet<> (width/renderThreadNumber);
+       
+       for (int x = 0; x < world.viewPlane.width; x += renderThreadNumber) {
+            Callable<Integer> callable = new ThreadRenderer(x);
+            Future<Integer> future = pool.submit(callable);
+            set.add(future);
+        }
+       
+        for (Future<Integer> thread : set) {
+            try {
+                p += thread.get();
+            } catch (InterruptedException | ExecutionException ex) {
+                Logger.getLogger(Driver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
 
         myImage.write("PNG");
 
@@ -86,12 +100,12 @@ public class Driver {
         projection = new Perspective(new Vector3D(camPosX, camPosY, camPosZ), new Vector3D(camLookAtX, camLookAtY, camLookAtZ), 35);
          
        int p = 0;
-       //ExecutorService pool = Executors.newCachedThreadPool();
-       ExecutorService pool = Executors.newFixedThreadPool(height/100);
-       Set<Future<Integer>> set  = new HashSet<> (height/100);
+       ExecutorService pool = Executors.newFixedThreadPool(width/renderThreadNumber);
+        System.out.println("dlugosc: " + width/renderThreadNumber);
+       Set<Future<Integer>> set  = new HashSet<> (width/renderThreadNumber);
        
-       for (int y = 0; y < world.viewPlane.height; y += 100) {
-            Callable<Integer> callable = new ThreadRenderer(width, y);
+       for (int x = 0; x < world.viewPlane.width; x += renderThreadNumber) {
+            Callable<Integer> callable = new ThreadRenderer(x);
             Future<Integer> future = pool.submit(callable);
             set.add(future);
         }
@@ -103,8 +117,6 @@ public class Driver {
                 Logger.getLogger(Driver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-//        System.out.println("skladanie renderu zakonczone " + p);
- 
 
         if (!"".equals(filepath) && animateNr == 0) {
             myImage.write("PNG");

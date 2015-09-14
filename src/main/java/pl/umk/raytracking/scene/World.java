@@ -48,7 +48,7 @@ public class World {
         //sfery
         objects.add(new Sphere(new Vector3D(-50, 0, 0), 50, shinyRed));        
         objects.add(new Sphere(new Vector3D(+450, 150, 390), 50, shinyRed));
-          objects.add(new Sphere(new Vector3D(0, 0, -150), 130, shinyMagenta));
+        objects.add(new Sphere(new Vector3D(0, 0, -150), 130, shinyMagenta));
         objects.add(new Sphere(new Vector3D(-650, 0, 0), 150, shinyGreen));
         
         //objects.add(new Sphere(new Vector3D(-650, 0, -400), 100, shinyYellow));        
