@@ -10,7 +10,7 @@ package pl.umk.raytracking.utility;
  * @author Szymon
  */
 public class Color {
-    public float r,g,b,s;
+    public float r,g,b,s,p;
 
     public Color() {
         r = 0.0F;
@@ -25,6 +25,14 @@ public class Color {
         this.g = g;
         this.b = b;
         this.s = s;
+    }
+     
+    public Color(float r, float g, float b, float s, float p) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.s = s;
+        this.p = p;
     }
     
     public Color(Color color){
@@ -118,4 +126,14 @@ public class Color {
 		
 		return new Color (r, g, b, s);
 	}
+
+    public float getP() {
+        return p;
+    }
+
+    public void setP(float p) {
+        this.p = p;
+    }
+    
+    
 }

@@ -6,11 +6,8 @@
 package pl.umk.raytracking;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -20,18 +17,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import pl.umk.raytracking.geometry.Sphere;
-import pl.umk.raytracking.light.Light;
-import pl.umk.raytracking.projection.Orthographic;
 import pl.umk.raytracking.projection.Perspective;
 import pl.umk.raytracking.projection.Projection;
-import pl.umk.raytracking.sampling.JitteredSample;
 import pl.umk.raytracking.sampling.RegularSample;
 import pl.umk.raytracking.sampling.Sampler;
 import pl.umk.raytracking.scene.World;
 import pl.umk.raytracking.threads.ThreadRenderer;
-import pl.umk.raytracking.utility.Color;
 import pl.umk.raytracking.utility.Image;
 
 import pl.umk.raytracking.utility.Vector3D;
@@ -49,7 +40,7 @@ public class Driver {
     public static Projection projection;
     // public static Projection lightProjection;
 
-    public static double ambientlight = -0.2;
+    public static double ambientlight = 0.05;
     public static double accuracy = 0.000000001;
 
     public Driver() throws IOException {
@@ -60,7 +51,7 @@ public class Driver {
         myImage = new Image("Image.png");
 
         sampler = new RegularSample(3);
-        projection = new Perspective(new Vector3D(0, 0, 800), new Vector3D(0.0, 0.0, 0.0), 35);
+        projection = new Perspective(new Vector3D(0, 130, 800), new Vector3D(0.0, 0.0, 0.0), 35);
         tracer = new Tracer();
         for (int y = 0; y < world.viewPlane.height; y += 1) {
             for (int x = 0; x < world.viewPlane.width; x += 1) {

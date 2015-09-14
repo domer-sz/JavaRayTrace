@@ -5,20 +5,13 @@
  */
 package pl.umk.raytracking;
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import pl.umk.raytracking.utility.Image;
-import pl.umk.raytracking.utility.Point2D;
 import pl.umk.raytracking.utility.Vector3D;
 
 /**
@@ -101,7 +94,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
         camPosXForm.setText("0");
 
-        camPosYForm.setText("0");
+        camPosYForm.setText("130");
         camPosYForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 camPosYFormActionPerformed(evt);
@@ -144,7 +137,12 @@ public class JFrameMain extends javax.swing.JFrame {
 
         jLabel8.setText("intenywność światła(-1.5;1.5):");
 
-        ambientlightForm.setText("-0.2");
+        ambientlightForm.setText("0.05");
+        ambientlightForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ambientlightFormActionPerformed(evt);
+            }
+        });
 
         antyAliasingNumber.setModel(new javax.swing.AbstractListModel() {
             Integer[] ints = { 1, 2, 3, 4, 5,6,7,8,9,10 };
@@ -458,7 +456,10 @@ public class JFrameMain extends javax.swing.JFrame {
             
             
             camPosXForm.setText(String.valueOf(camx));
+            camPosZForm.setText(String.valueOf(camz));
+            
             lookAtX.setText(String.valueOf(lookx));
+            lookAtZ.setText(String.valueOf(lookz));
 
             im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
                     camx, camy, camz, lookx,
@@ -496,7 +497,11 @@ public class JFrameMain extends javax.swing.JFrame {
             
             
             camPosXForm.setText(String.valueOf(camx));
+            camPosZForm.setText(String.valueOf(camz));
+            
             lookAtX.setText(String.valueOf(lookx));
+            lookAtZ.setText(String.valueOf(lookz));
+            
             im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
                     camx, camy, camz, lookx,
                     Double.parseDouble(lookAtY.getText()), lookz, a, "", 0);
@@ -531,7 +536,10 @@ public class JFrameMain extends javax.swing.JFrame {
             
             
             camPosZForm.setText(String.valueOf(camz));
+            camPosXForm.setText(String.valueOf(camx));
+            
             lookAtZ.setText(String.valueOf(lookz));
+            lookAtX.setText(String.valueOf(lookx));
 
             im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
                     camx, camy, camz, lookx,
@@ -564,7 +572,10 @@ public class JFrameMain extends javax.swing.JFrame {
             lookz -= Math.round(vector.mult(stepDist*2).z);
             
             
+            camPosXForm.setText(String.valueOf(camx));
             camPosZForm.setText(String.valueOf(camz));
+            
+            lookAtX.setText(String.valueOf(lookx));
             lookAtZ.setText(String.valueOf(lookz));
 
             im = Driver.render(800, 600, Double.parseDouble(ambientlightForm.getText()),
@@ -589,6 +600,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
             lookx =  Math.round( (lookx-camx)*Math.cos(-0.1) - (lookz - camz)*Math.sin(-0.1)+camx );
             lookz =  Math.round( (lookx-camx)*Math.sin(-0.1) + (lookz - camz)*Math.cos(-0.1)+camz );
+            
             lookAtX.setText(String.valueOf(lookx));
             lookAtZ.setText(String.valueOf(lookz));
 
@@ -614,6 +626,7 @@ public class JFrameMain extends javax.swing.JFrame {
 
             lookx = Math.round( (lookx-camx)*Math.cos(0.1) - (lookz - camz)*Math.sin(0.1)+camx );
             lookz =  Math.round( (lookx-camx)*Math.sin(0.1) + (lookz - camz)*Math.cos(0.1)+camz );
+            
             lookAtX.setText(String.valueOf(lookx));
             lookAtZ.setText(String.valueOf(lookz));
 
@@ -685,8 +698,12 @@ public class JFrameMain extends javax.swing.JFrame {
         
     }//GEN-LAST:event_animateActionPerformed
 
+    private void ambientlightFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ambientlightFormActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ambientlightFormActionPerformed
+
     double camx = 0;
-    double camy = 0;
+    double camy = 130;
     double camz = 800;
 
     double lookx = 0;
