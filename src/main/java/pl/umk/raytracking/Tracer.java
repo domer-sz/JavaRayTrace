@@ -90,25 +90,6 @@ public class Tracer{
         Color winning_object_color = scene_objects.get(index_of_winning_object).getColor();
         Vector3D winning_object_normal = scene_objects.get(index_of_winning_object).getNormalAt(intersection_position);
         
-       
-//        if (winning_object_color.p == 1) {
-//            //System.out.println("robie podloge");
-//		// checkered/tile floor pattern
-//
-//            int square = (int) Math.floor(intersection_position.getX()) + (int) Math.floor(intersection_position.getZ());
-//
-//            if ( square % 100 > 0 && square % 100 < 50) {
-//
-//                winning_object_color.setRed(0);
-//                winning_object_color.setGreen(0);
-//                winning_object_color.setBlue(0);
-//            } else {
-//
-//                winning_object_color.setRed(1);
-//                winning_object_color.setGreen(1);
-//                winning_object_color.setBlue(1);
-//            }
-//        }
 
         Color final_color = winning_object_color.colorScalar(Driver.ambientlight);
         
@@ -178,7 +159,7 @@ public class Tracer{
                 }
  
                 //oswietlenie
-                if (shadowed == false) {
+               // if (shadowed == false) {
                     final_color = final_color.colorAdd(winning_object_color.colorMultiply(lightSources.get(light_index).getColor()).colorScalar(cosine_angle));
 
                     if (winning_object_color.getSpecial() > 0 && winning_object_color.getSpecial() <= 1) {
@@ -197,11 +178,19 @@ public class Tracer{
                         }
                     }
 
-                }
+               // }
+                    
+                    if(shadowed){
+                        if(Driver.ambientlight >= 0)
+                            final_color = final_color.colorDevide(2);
+                        else
+                            final_color = final_color.colorDevide(3);
+                                    
+                    }
 
             }
         }
-
+        
         return final_color.clip();
     }
     
