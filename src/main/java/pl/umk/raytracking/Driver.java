@@ -39,6 +39,8 @@ public class Driver {
     public static Sampler sampler;
     public static Projection projection;
     public static int renderThreadNumber = 100;
+    public static int reflections = 5;
+    
 
     public static double ambientlight = 0.05;
     public static double accuracy = 0.000000001;

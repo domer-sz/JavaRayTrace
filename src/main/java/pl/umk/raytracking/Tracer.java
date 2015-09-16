@@ -44,6 +44,7 @@ public class Tracer{
         for (int row = 0; row < Driver.sampler.samples; row++) {
             for (int col = 0; col < Driver.sampler.samples; col++) {
                 Point2D point = Driver.sampler.sample(row, col, x, y);
+               
                 Ray camRay = Driver.projection.createRay(point);
 
                 double min = Double.MAX_VALUE;
@@ -63,7 +64,7 @@ public class Tracer{
                      if (intersections.get(winningObjIndex) > Driver.accuracy) {
                          Vector3D intersection_position = camRay.origin.vectAdd(camRay.direction.vectMult(intersections.get(winningObjIndex)));
                          Vector3D intersecting_ray_direction = camRay.direction;
-                         tempColor = getColorAt(intersection_position, intersecting_ray_direction, Driver.world.objects, winningObjIndex, Driver.world.lightSources);
+                         tempColor = getColorAt(intersection_position, intersecting_ray_direction, Driver.world.objects, winningObjIndex, Driver.world.lightSources, 1);
                         // tempColor = Driver.world.objects.get(winningObjIndex).getColor();
                          hit=true;
                      }
@@ -85,7 +86,7 @@ public class Tracer{
     
 
     public static Color getColorAt(Vector3D intersection_position, Vector3D intersecting_ray_direction,
-            List<GeometricObject> scene_objects, int index_of_winning_object, List<Source> lightSources) {
+            List<GeometricObject> scene_objects, int index_of_winning_object, List<Source> lightSources, int refl) {
       //  System.out.println(index_of_winning_object);
         Color winning_object_color = scene_objects.get(index_of_winning_object).getColor();
         Vector3D winning_object_normal = scene_objects.get(index_of_winning_object).getNormalAt(intersection_position);
@@ -94,7 +95,7 @@ public class Tracer{
         Color final_color = winning_object_color.colorScalar(Driver.ambientlight);
         
         //odbicia
-        if (winning_object_color.getSpecial() > 0 && winning_object_color.getSpecial() <= 1) {
+        if (winning_object_color.getSpecial() > 0 && winning_object_color.getSpecial() <= 1 && refl <= Driver.reflections ) {
 
             double dot1 = winning_object_normal.dotProduct(intersecting_ray_direction.negative());
             Vector3D scalar1 = winning_object_normal.vectMult(dot1);
@@ -120,7 +121,7 @@ public class Tracer{
                     Vector3D reflection_intersection_position = intersection_position.vectAdd(reflection_direction.vectMult(reflection_intersections.get(index_of_winning_object_with_reflection)));
                     Vector3D reflection_intersection_ray_direction = reflection_direction;
 
-                    Color reflection_intersection_color = getColorAt(reflection_intersection_position, reflection_intersection_ray_direction, scene_objects, index_of_winning_object_with_reflection, lightSources);
+                    Color reflection_intersection_color = getColorAt(reflection_intersection_position, reflection_intersection_ray_direction, scene_objects, index_of_winning_object_with_reflection, lightSources, refl+1);
 
                     final_color = final_color.colorAdd(reflection_intersection_color.colorScalar(winning_object_color.getSpecial()));
                 }
@@ -159,11 +160,9 @@ public class Tracer{
                 }
  
                 //oswietlenie
-               // if (shadowed == false) {
                     final_color = final_color.colorAdd(winning_object_color.colorMultiply(lightSources.get(light_index).getColor()).colorScalar(cosine_angle));
 
-                    if (winning_object_color.getSpecial() > 0 && winning_object_color.getSpecial() <= 1) {
-                        // special [0-1]
+                    if (winning_object_color.getSpecial() > 0 && winning_object_color.getSpecial() <= 1) {                        
                         double dot1 = winning_object_normal.dotProduct(intersecting_ray_direction.negative());
                         Vector3D scalar1 = winning_object_normal.vectMult(dot1);
                         Vector3D add1 = scalar1.vectAdd(intersecting_ray_direction);
@@ -178,14 +177,9 @@ public class Tracer{
                         }
                     }
 
-               // }
                     
                     if(shadowed){
-                        if(Driver.ambientlight >= 0)
-                            final_color = final_color.colorDevide(2);
-                        else
-                            final_color = final_color.colorDevide(3);
-                                    
+                        final_color = final_color.colorDevide(3);                                    
                     }
 
             }
